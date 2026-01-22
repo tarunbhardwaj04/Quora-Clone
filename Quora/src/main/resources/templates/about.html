@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quora-Clo</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+    <h1>🚀 Quora Clone - Spring Boot Backend</h1>
+
+
+    <p class="para">A robust, enterprise-grade REST API built using Spring Boot 3.5.x, designed to replicate the core
+        functionalities of a Q&A platform like Quora. This project focuses on high performance, clear architectural
+        separation, and reliable database versioning.</p>
+
+    <h2 class="subheading">🏛️ Architectural Overview</h2>
+    <p class="para">The project follows a Layered Architecture to ensure clean code, maintainability, and easy testing:
+
+        Controller Layer: Handles incoming HTTP requests and maps them to service methods.
+
+        Service Layer: Contains the core business logic, validations, and orchestration between different components.
+
+        Repository Layer: Utilizes Spring Data JPA for efficient interaction with the MySQL database.
+
+        Entity Layer: Defines the database schema using Java objects (User, Question, Answer, Topic).
+
+        DTO (Data Transfer Object): Decouples the internal database structure from the API response to maintain security
+        and flexibility.</p>
+
+    <h2 class="subheading">🛠️ Technology Stack</h2>
+    <p class="para">Java 21: Leveraging the latest LTS features.
+
+        Spring Boot 3.5.x: Core framework for auto-configuration and rapid development.
+
+        MySQL: Relational database for persistent storage.
+
+        Flyway: Professional database migration tool to manage schema versioning and history.
+
+        Hibernate/JPA: ORM for seamless mapping between Java objects and SQL tables.
+
+        Maven: Dependency management and build automation.</p>
+
+    <h2 class="subheading">🗄️ Database Management & Migration</h2>
+    <p class="para">Unlike traditional projects that use ddl-auto=update, this project utilizes Flyway for database
+        versioning.
+
+        Version Control: All schema changes (tables, indexes, constraints) are tracked in
+        src/main/resources/db/migration.
+
+        Reliability: Hibernate is set to validate mode, ensuring the Java code and Database schema stay perfectly
+        synchronized.
+
+        Audit Trail: Flyway maintains a flyway_schema_history table to track which migrations have been applied.</p>
+
+    <h2 class="subheading">🔑 Core Features</h2>
+    <p class="para">User Profiles: Comprehensive user registration and bio management.
+
+        Threaded Q&A: Users can post questions and provide multiple answers per question.
+
+        Topic Categorization: Questions can be tagged with various topics for better discoverability.
+
+        Relational Integrity: Strict use of Foreign Keys and constraints to ensure data consistency.</p>
+</body>
+
+</html>
