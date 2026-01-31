@@ -18,9 +18,6 @@ public class TopicService {
 
     @Autowired
     private TopicRepository topicRespository;
-
-    @Autowired
-    private TraceAdapter topicAdapter;
     
     public Page<?> getAllTopics()
     {
