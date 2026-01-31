@@ -1,95 +1,35 @@
-# Quora-Clone
+# Quora Clone - Backend API
 
- create table answers (
-       id binary(255) not null,
-        content varchar(255),
-        created_at datetime(6),
-        updated_at datetime(6),
-        question_id binary(255),
-        user_id binary(255),
-        primary key (id)
-    ) engine=InnoDB
-Hibernate: 
+A full-stack inspired social Q&A platform built using **Spring Boot**, **Spring Security**, and **MySQL**. This project demonstrates a robust implementation of social media features, including user authentication, hierarchical data relationships, and secure API design.
 
-    create table comments (
-       id binary(255) not null,
-        comment varchar(255),
-        created_at datetime(6),
-        updated_at datetime(6),
-        answer_id binary(255),
-        user_id binary(255),
-        parent_comment_id binary(255),
-        primary key (id)
-    ) engine=InnoDB
-Hibernate: 
 
-    create table questions (
-       id binary(255) not null,
-        body varchar(255) not null,
-        created_at datetime(6) not null,
-        title varchar(255) not null,
-        topic_id binary(255),
-        user_id binary(255),
-        primary key (id)
-    ) engine=InnoDB
-Hibernate: 
 
-    create table topics (
-       id binary(255) not null,
-        name varchar(255) not null,
-        primary key (id)
-    ) engine=InnoDB
-Hibernate: 
+## 🚀 Key Features
 
-    create table users (
-       id binary(255) not null,
-        bio varchar(255),
-        created_at datetime(6),
-        email varchar(255) not null,
-        password varchar(255) not null,
-        role varchar(255),
-        username varchar(255) not null,
-        primary key (id)
-    ) engine=InnoDB
-Hibernate: 
+* **Secure Authentication**: Implemented **JWT (JSON Web Tokens)** for stateless session management and **Spring Security** for role-based access control.
+* **Hierarchical Entity Mapping**: Complex JPA relationships between Users, Questions, Answers, Comments, and Likes.
+* **Topic-Based Categorization**: Questions are mapped to specific topics (e.g., Java, Spring Boot) for better discoverability.
+* **Interaction System**: Full support for Upvoting/Downvoting and threaded commenting.
+* **Robust Exception Handling**: Custom global exception handlers for `ResourceNotFound` and `BadRequest` scenarios.
 
-    alter table answers
-       add constraint FK3erw1a3t0r78st8ty27x6v3g1
-       foreign key (question_id)
-       references questions (id)
-Hibernate: 
+## 🛠️ Tech Stack
 
-    alter table answers
-       add constraint FK5bp3d5loftq2vjn683ephn75a
-       foreign key (user_id)
-       references users (id)
-Hibernate: 
+* **Backend**: Java 17, Spring Boot 3.x
+* **Security**: Spring Security, JWT (JJWT Library)
+* **Data**: Spring Data JPA, Hibernate, MySQL
+* **Tools**: Maven, Lombok, Postman (for API testing)
 
-    alter table comments
-       add constraint FKoiwlwqmu9qm0tjnafxqr20rd8
-       foreign key (answer_id)
-       references answers (id)
-Hibernate: 
 
-    alter table comments
-       add constraint FK8omq0tc18jd43bu5tjh6jvraq
-       foreign key (user_id)
-       references users (id)
-Hibernate: 
 
-    alter table comments
-       add constraint FK7h839m3lkvhbyv3bcdv7sm4fj
-       foreign key (parent_comment_id)
-       references comments (id)
-Hibernate: 
+## 🏗️ Project Structure
 
-    alter table questions
-       add constraint FKdb5p6ukb0v76he4pq87cbymhg
-       foreign key (topic_id)
-       references topics (id)
-Hibernate: 
-
-    alter table questions
-       add constraint FKjoo8hp6d3gfwctr68dl2iaemj
-       foreign key (user_id)
-       references users (id)
+```text
+src/main/java/com/App/Quora
+├── Adapters        # DTO to Entity mapping logic
+├── Configuration   # Security & JWT filter setups
+├── Controller      # REST API Endpoints
+├── DTO             # Data Transfer Objects for requests/responses
+├── Entity          # Database Models (User, Question, Topic, etc.)
+├── ExceptionHandler # Global @ControllerAdvice
+├── Repository      # Spring Data JPA Interfaces
+└── Service         # Business Logic Layer

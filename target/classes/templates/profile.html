@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Your Profile - Quora Clone</title>
+</head>
+
+<body>
+    <div layout:fragment="content" class="bg-gray-50 min-h-screen py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Profile Header -->
+            <div class="relative bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                <!-- Cover Image -->
+                <div class="h-48 bg-gradient-to-r from-brand-600 to-brand-400"></div>
+
+                <div class="px-8 pb-8">
+                    <div class="relative flex items-end -mt-16 mb-4">
+                        <!-- Avatar -->
+                        <div class="relative">
+                            <img id="headerAvatar"
+                                class="h-32 w-32 rounded-full border-4 border-white shadow-md bg-white object-cover"
+                                src="https://ui-avatars.com/api/?name=User&background=random" alt="Avatar">
+                        </div>
+
+                        <!-- Header Info -->
+                        <div class="ml-6 mb-2 flex-1">
+                            <h1 id="headerName" class="text-3xl font-extrabold text-gray-900">Loading...</h1>
+                            <p id="headerUsername" class="text-gray-500 font-medium text-lg">@username</p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="mb-4">
+                            <button onclick="saveProfile()" id="saveBtn"
+                                class="hidden px-6 py-2.5 bg-brand-600 text-white rounded-full font-bold shadow-md hover:bg-brand-700 hover:shadow-lg transition-all transform active:scale-95">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- Left Column: Bio & Stats -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-bold text-gray-900 mb-2">Intro</h3>
+                        <p id="bioDisplay" class="text-gray-600 mb-4 whitespace-pre-wrap">No bio added yet.</p>
+
+                        <div class="border-t border-gray-100 pt-4 space-y-2">
+                            <div class="flex items-center text-gray-600 text-sm">
+                                <i class="fa-solid fa-briefcase w-6 text-center text-gray-400"></i>
+                                <span>Works at <span class="font-semibold text-gray-900">Future Inc.</span></span>
+                            </div>
+                            <div class="flex items-center text-gray-600 text-sm">
+                                <i class="fa-solid fa-graduation-cap w-6 text-center text-gray-400"></i>
+                                <span>Studied at <span class="font-semibold text-gray-900">University</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings Form -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">Profile Settings</h2>
+                            <span class="text-sm text-gray-500 italic">Make changes below and click Save</span>
+                        </div>
+
+                        <form id="profileForm" class="space-y-6">
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
+                                    <input type="text" id="inputName" class="input-field" placeholder="Your full name">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">Username</label>
+                                    <input type="text" id="inputUsername"
+                                        class="input-field bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                                    <p class="text-xs text-gray-400 mt-1">Username cannot be changed</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Bio</label>
+                                <textarea id="inputBio" rows="4" class="input-field resize-none"
+                                    placeholder="Tell us about yourself..."></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                                    <input type="email" id="inputEmail"
+                                        class="input-field bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <div class="mt-8 flex justify-end">
+                            <button onclick="saveProfile()" class="btn-primary w-auto px-8">Update Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script layout:fragment="script">
+
+        // Headers helper
+        function getAuthHeaders() {
+            const token = localStorage.getItem('jwt_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+            return headers;
+        }
+
+        async function fetchProfile() {
+            try {
+                const response = await fetch('/api/user/me', { headers: getAuthHeaders() });
+                if (response.status === 401 || response.status === 403) {
+                    window.location.href = '/login';
+                    return;
+                }
+                const user = await response.json();
+                populateProfile(user);
+            } catch (err) {
+                console.error("Failed to fetch profile", err);
+            }
+        }
+
+        function populateProfile(user) {
+            // Header
+            document.getElementById('headerName').textContent = user.name || user.username;
+            document.getElementById('headerUsername').textContent = '@' + user.username;
+
+            // Avatar (using ui-avatars for initials)
+            const initials = user.name ? user.name : user.username;
+            const avatarUrl = `https://ui-avatars.com/api/?name=${initials}&background=random&size=256&font-size=0.4`;
+            document.getElementById('headerAvatar').src = avatarUrl;
+
+            // Bio
+            document.getElementById('bioDisplay').textContent = user.bio || "No bio added yet.";
+
+            // Form Inputs
+            document.getElementById('inputName').value = user.name || '';
+            document.getElementById('inputUsername').value = user.username || '';
+            document.getElementById('inputEmail').value = user.email || '';
+            document.getElementById('inputBio').value = user.bio || '';
+        }
+
+        async function saveProfile() {
+            const name = document.getElementById('inputName').value;
+            const bio = document.getElementById('inputBio').value;
+
+            // Basic validation
+            if (!name) {
+                alert("Name cannot be empty");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/me', {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        name: name,
+                        bio: bio
+                    })
+                });
+
+                if (response.ok) {
+                    const updatedUser = await response.json();
+                    populateProfile(updatedUser);
+                    alert("Profile updated successfully!");
+                    // Update global avatar checks if needed by reloading or event
+                    location.reload();
+                } else {
+                    alert("Failed to update profile.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error updating profile");
+            }
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', fetchProfile);
+
+    </script>
+</body>
+
+</html>
