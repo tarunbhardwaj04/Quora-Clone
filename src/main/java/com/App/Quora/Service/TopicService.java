@@ -8,8 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.App.Quora.Repository.TopicRepository;
 
-import antlr.debug.TraceAdapter;
-
 import com.App.Quora.Entity.Topic;
 import com.App.Quora.ExceptionHandler.BadRequestException;
 

@@ -49,7 +49,7 @@ public class Comment {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
+    @JoinColumn(name = "parent_comment_id") 
     @JsonBackReference(value = "comment_comments")
     private Comment parent;
 
