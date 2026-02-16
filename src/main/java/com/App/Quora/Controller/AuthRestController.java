@@ -33,7 +33,6 @@ public ResponseEntity<?> authenticateAndGetToken(@RequestBody LoginRequest authR
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
     } catch (Exception e) {
-        // This will tell you if the error is actually an AuthenticationException
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

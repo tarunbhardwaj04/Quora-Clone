@@ -30,7 +30,7 @@ public class AuthSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/Quora/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/user/register")).permitAll()
@@ -78,25 +78,5 @@ public class AuthSecurity {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        java.util.List<String> allowedOrigins = new java.util.ArrayList<>();
-        allowedOrigins.add("http://localhost:5173");
-        configuration.setAllowedOrigins(allowedOrigins);
-        java.util.List<String> allowedMethods = new java.util.ArrayList<>();
-        allowedMethods.add("GET");
-        allowedMethods.add("POST");
-        allowedMethods.add("PUT");
-        allowedMethods.add("DELETE");
-        allowedMethods.add("OPTIONS");
-        configuration.setAllowedMethods(allowedMethods);
-        java.util.List<String> allowedHeaders = new java.util.ArrayList<>();
-        allowedHeaders.add("*");
-        configuration.setAllowedHeaders(allowedHeaders);
-        configuration.setAllowCredentials(true);
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+
 }
