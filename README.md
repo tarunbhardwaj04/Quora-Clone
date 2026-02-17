@@ -14,7 +14,7 @@ A full-stack inspired social Q&A platform built using **Spring Boot**, **Spring 
 
 ## 🛠️ Tech Stack
 
-* **Backend**: Java 17, Spring Boot 3.x
+* **Backend**: Java 21, Spring Boot 3.x
 * **Security**: Spring Security, JWT (JJWT Library)
 * **Data**: Spring Data JPA, Hibernate, MySQL
 * **Tools**: Maven, Lombok, Postman (for API testing)
